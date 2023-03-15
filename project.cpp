@@ -1,25 +1,33 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 class Item {
 private:
+
     int ID;
-    string name;
-    double weight;
-    bool fragile;
+    //int room;
+    string nm;
+    double wht;
+    double lnht;
+    double hgt;
 
 public:
-    Item(int id, string n, double w, bool f) : ID(id), name(n), weight(w), fragile(f) {}
+    Item(int id,string n,double w, double h, double l) : ID(id), nm(n), wht(w), lnht(l), hgt(h)
+    {}
 
-    void displayItem() 
+    void display() 
     {
+        cout<<"\n****************************************\n";
+        cout<<" Printing....\n\n";
         cout << "Item ID: " << ID << endl;
-        cout << "Item Name: " << name << endl;
-        cout << "Item Weight: " << weight << endl;
-        cout << "Fragile: " << (fragile ? "True" : "No") << endl;
-        cout << endl;
+        cout << "Item Name: " << nm << endl;
+        cout << "Item Weight: " << wht << endl;
+        cout << "Item lenght: " << lnht << endl;
+        cout << "Item height: " << hgt << endl;
+        cout<<"\n****************************************\n";
     }
 
     int getID() 
@@ -29,155 +37,127 @@ public:
 
     string getName() 
     {
-        return name;
+        return nm;
     }
 
     double getWeight()
     {
-        return weight;
-    }
-
-    bool isFragile()
-    {
-        return fragile;
+        return wht;
     }
 };
 
-class Van {
+class StackVan
+{
 private:
-    int maxCapacity = 3600; // maximum weight capacity of the van
-    vector<Item*>stackVect; // stack of items to be moved
-    double currentCapacity = 0; // current weight of the items in the van
-    int top=-1; //top of stack
-    
-    void quicksort(int low, int high) 
-   {
-        if (low < high) 
-        {
-            int pivot = partition(low, high);
-            quicksort(low, pivot-1);
-            quicksort(pivot+1, high);
-        }
-    }
-    
-    int partition(int low, int high) 
-    {
-        double pivot = stackVect[low]->getWeight(); // use weight of first item as pivot
-        int i = high + 1;
-        for (int j = high; j > low; j--) 
-        {
-            if (stackVect[j]->getWeight() < pivot) // modified condition here
-            {
-                i--;
-                swap(stackVect[i], stackVect[j]);
-            }
-        }
-        swap(stackVect[i-1], stackVect[low]);
-        return i-1;
-    }
+
+    int maxSize; //size of stack vector
+    vector<Item*> stackItems; //stack vector
+    int top; //top of stack
+    double weightMax = 1000;
+    double currentWht;
+
 public:
-Van(int maxCap) : maxCapacity(maxCap), currentCapacity(0), top(-1) {
-    stackVect = vector<Item*>(maxCapacity);
+//--------------------------------------------------------------
+
+StackVan() : maxSize(250), currentWht(0), top(-1) //constructor
+{
+    stackItems.reserve(250); //size the vector
+}
+//--------------------------------------------------------------
+void push(int id, string n, double w, double h, double l) // put item on top
+{
+    if (isFull())
+    {
+        cout << "!Error! The Van Can not hold any more items!" << endl;
+        return;
     }
-
-
-  void pushitem(int ID, string name, double weight, bool fragile) 
-  {
-        // Check if van is full
-        if (isFull()) 
-        {
-            cout << "Van is full." << endl;
-            return;
-        }
-        // Check if adding the item will exceed van's capacity
-        if (currentCapacity + weight > maxCapacity) 
-        {
-            cout << "Item cannot be added to van as it exceeds the van's capacity." << endl;
-            return;
-        }
-        // Create new item object and add it to the vector
-        stackVect[++top] = new Item(ID, name, weight, fragile);
-        
-        // Sort the vector using quicksort algorithm
-        quicksort(0, top);
+    // Check if adding the item will exceed van's capacity
+    if (currentWht + w < weightMax) 
+    {
+        stackItems[++top] = new Item(id, n, w, h, l); // increment top
+    }
+    else
+    {
+        cout << "!Error!\n The Van Has Reached its Weight Capacity!" << endl;
+        return;
+    }
+      // Sort the vector using quicksort algorithm
+       // quicksort(0, top);
         
         // Update current capacity
-        currentCapacity += weight;
-    }
-    
-   void popitem()
+        currentWht += w;
+}
+
+//--------------------------------------------------------------
+void pop() // take item from top of stack
+{
+    if (isEmpty())
     {
-     if (isEmpty()) 
-     {
+        cout << "Stack is empty. Cannot delete more items." << endl;
+        return;
+    }
+    stackItems[top]->display();
+    currentWht-= stackItems[top]->getWeight();
+    top -= 1;
+}
+//--------------------------------------------------------------
+char peek() //peek at top of stack
+{ 
+    stackItems[top]->display();
+}
+//--------------------------------------------------------------
+void peekAll()
+{
+    for (int i=top;i>=0;i--)
+    {
+        stackItems[i]->display();
+    }
+}
+//--------------------------------------------------------------
+bool isEmpty() //true if stack is empty
+{ 
+    return (top == -1); 
+}
+//--------------------------------------------------------------
+bool isFull()
+{
+    return (top == maxSize - 1); // stack is full when top is equal to the last index
+}
+void popspecificitem(int ID) 
+{
+    if (isEmpty()) 
+    {
         cout << "Van is currently empty." << endl;
         return;
     }
-    delete stackVect[top--];
-    currentCapacity -= stackVect[top]->getWeight();
-    }
-
-    
-    void popspecificitem(int ID) 
-    {
-        if (isEmpty()) 
-         {
-            cout << "Van is currently empty." << endl;
-            return;
-         }
     // Check if the item exists in the van
     bool found = false;
     for (int i = 0; i <= top; i++) 
     {
-        if (stackVect[i]->getID() == ID) 
+    if (stackItems[i]->getID() == ID) 
+    {
+       found = true;
+        // Remove the item from the vector and update the current capacity
+        currentWht -= stackItems[i]->getWeight();
+        delete stackItems[i];
+        // Shift the remaining items in the vector to fill the gap
+        for (int j = i; j < top; j++) 
         {
-            found = true;
-            // Remove the item from the vector and update the current capacity
-            currentCapacity -= stackVect[i]->getWeight();
-            delete stackVect[i];
-            // Shift the remaining items in the vector to fill the gap
-            for (int j = i; j < top; j++) 
-            {
-                stackVect[j] = stackVect[j+1];
-            }
-            top--;
-            break;
+            stackVect[j] = stackVect[j+1];
         }
+        top--;
+        break;
+    }
     }
     if (!found) 
     {
         cout << "Item with ID " << ID << " is not in the van." << endl;
     }
-    }
-    void peek()
-    {
-       for (int i=top;i>=0;i--)
-            {
-                stackVect[i]->displayItem();
-            }
-    }
-
-bool isEmpty() 
-    {
-        return (top == -1);
-    }
-
-    bool isFull() 
-    {
-        return (currentCapacity >= maxCapacity);
-    }
-
-};
-int main()
+}
+int showMenu()
 {
-    Van truck(3600); // initialize van with a maximum capacity of 3600
     int choice;
-    int ID;
-    string name;
-    double weight;
-    bool fragile;
-    
-    cout<<"Welcome to 2 Men and a Truck Moving Service "<<endl;
-    cout<<endl;
+    cout<<"Welcome to CMC Inc. Van Service... \n\n";
     cout<<"Moving Service Menu"<<endl;
     cout<<"1.Add an Item to the Truck"<<endl;
     cout<<"2.Remove an Item from the list(Removes from the back)"<<endl;
@@ -187,12 +167,21 @@ int main()
     cout<<"6.Quit Program"<<endl;
     cout<<"Choice :";
     cin>>choice;
+}
+
+};
+int main()
+{
+    StackVan truck(); // initialize van with a maximum capacity of 3600
+    int choice;
+    choice = truck.showMenu():
+    
     while (choice!=6)
     {
         if (choice==1)
         {
-            cout << endl;
-            cout << "Item ID: ";
+            
+            cout << "\nItem ID: ";
             cin >> ID;
             cout << "Item Name: ";
             cin >> name;
@@ -200,7 +189,7 @@ int main()
             cin >> weight;
             cout << "Fragile? (1.Yes or 0.No) ";
             cin >> fragile;
-            truck.pushitem(ID, name, weight,fragile);
+            truck.push(ID, name, weight,fragile);
         }
         else if (choice==2)
         {
