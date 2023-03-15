@@ -190,7 +190,6 @@ void popspecificitem(int ID)
 }
 int showMenu()
 {
-    int choice;
     cout<<"Welcome to CMC Inc. Van Service... \n\n";
     cout<<"Moving Service Menu"<<endl;
     cout<<"1.Add an Item to the Truck"<<endl;
@@ -200,7 +199,61 @@ int showMenu()
     cout<<"5.Display Final List of Items in the Van"<<endl;
     cout<<"6.Quit Program"<<endl;
     cout<<"Choice :";
-    cin>>choice;
+}
+void Menu()
+{
+    int choice;
+            menu();
+            cin >> choice;
+            cout << "-----------------------------------------------------------" << endl;
+    
+            while(option != 7)
+            {
+                switch(option)
+                {
+                    case 1:
+                    {
+                        cout<<"\n*********************************************\n";
+                        string IName;
+                        float IPrice;
+                        cout << "Please Enter Item Name: ";
+                        cin >> IName;
+                        cout << "Please Enter Item Price: ";
+                        cin >> IPrice;
+                        push(IName, IPrice);
+                        
+                        break;
+                    }
+                    case 2: 
+                    {
+                         cout<<"\n*********************************************\n";
+                         peek();
+                        break;
+                    }
+                    case 3:
+                    {
+                        cout<<"\n*********************************************\n";
+                        pop();
+                        break;
+                    }
+                    case 4: 
+                    {
+                        cout<<"\n*********************************************\n";
+                        total();
+                        break;
+                    }
+                    default:
+                    {
+                        cout<<"\n*********************************************\n";
+                        cout << "Not an Option" << endl;
+                        break;
+                    }
+                }
+                menu();
+                cin >> option;
+                
+            }
+            cout << "You have Exited the Shop, have a Great Day!";
 }
 
 };
