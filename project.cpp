@@ -98,7 +98,7 @@ void pushi(Item it) // put item on top
     // Check if adding the item will exceed van's capacity
     if (currentWht + w < weightMax) 
     {
-        stackItems[++top] = new Itemi(); // increment top
+        stackItems[++top] = new Item(it); // increment top
     }
     else
     {
@@ -123,6 +123,13 @@ void pop() // take item from top of stack
     stackItems[top]->display();
     currentWht-= stackItems[top]->getWeight();
     top -= 1;
+}
+Item* ret()
+{
+    Item send();
+    send = stackItems[top];
+    top--;
+    return send;
 }
 //--------------------------------------------------------------
 char peek() //peek at top of stack
@@ -149,6 +156,7 @@ bool isFull()
 }
 void popspecificitem(int ID) 
 {
+    StackVan TempSt();
     if (isEmpty()) 
     {
         cout << "Van is currently empty." << endl;
@@ -167,13 +175,17 @@ void popspecificitem(int ID)
         }
         else 
         {
-            StackVan TempSt();
             TempSt.pushi(stackItems[i]);
         }
     }
+
     if (!found) 
     {
         cout << "Item with ID " << ID << " is not in the van." << endl;
+    }
+    else 
+    {
+        stackItems.push(TempSt.ret);
     }
 }
 int showMenu()
