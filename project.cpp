@@ -197,7 +197,8 @@ int showMenu()
     cout<<"3.Remove a Specific Item Based on ID"<<endl;
     cout<<"4.Calculate optimal order to load in truck"<<endl;
     cout<<"5.Display Final List of Items in the Van"<<endl;
-    cout<<"6.Quit Program"<<endl;
+    cout<<"6.Search By Rooms"<<endl;
+    cout<<"7.Quit Program"<<endl;
     cout<<"Choice :";
 }
 void Menu()
