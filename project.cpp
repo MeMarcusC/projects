@@ -100,6 +100,12 @@ StackVan() : maxSize(250), currentWht(0), top(-1) //constructor
     stackItems.reserve(250); //size the vector
 }
 //--------------------------------------------------------------
+void pushs(int id, string n, double w, double h, double l) // put item on top
+{
+    stackItems[top+1] = new Item(id, n, w, h, l);
+    genid++;
+
+}
 void push(int id, string n, double w, double h, double l) // put item on top
 {
     cout<<"\n*********************************************\n";  
@@ -278,11 +284,11 @@ void showMenu()
 int main()
 {
     StackVan truck; // initialize van with a maximum capacity of 3600
-    truck.push(1000,"Sofa", 50, 4, 3 );
-    truck.push(1001,"Lamp", 3, 0.5, 1 );
-    truck.push(1002,"Box", 10, 5, 5 );
-    truck.push(1003,"Chair", 5, 3, 4 );
-    truck.push(1004,"Table", 20, 7, 5 );
+    truck.pushs(1000,"Sofa", 50, 4, 3 );
+    truck.pushs(1001,"Lamp", 3, 0.5, 1 );
+    truck.pushs(1002,"Box", 10, 5, 5 );
+    truck.pushs(1003,"Chair", 5, 3, 4 );
+    truck.pushs(1004,"Table", 20, 7, 5 );
     int choice;
     truck.showMenu();
     cin >> choice;
