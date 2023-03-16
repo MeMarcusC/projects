@@ -293,7 +293,7 @@ void showMenu() // This is the menu that will be displayed so user can make a ch
     cout<<"7.View Current Size Properties of Van\n";
     cout<<"8.Quit Program\n";
     cout<<"\n*********************************************";
-    cout<<"\nChoice :";
+    cout<<"\nChoice: ";
 }
 
 
