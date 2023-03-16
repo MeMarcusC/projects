@@ -8,7 +8,6 @@ class Item {
 private:
 
     int ID;
-    int room;
     string nm;
     double wht;
     double lnht;
@@ -19,18 +18,16 @@ public:
     {ID=0;}
     Item(int id,string n,double w, double h, double l) : ID(id), nm(n), wht(w), lnht(l), hgt(h)
     {}
-Item(const Item* obj) { ID = obj->ID; nm = obj->nm; wht = obj->wht; lnht = obj->lnht; hgt = obj->hgt;}
+    Item(const Item* obj) { ID = obj->ID; nm = obj->nm; wht = obj->wht; lnht = obj->lnht; hgt = obj->hgt;}
 
     void display() 
     {
-        cout<<"\n****************************************\n";
-        cout<<" Printing....\n\n";
+        cout<<"\nPrinting....\n\n";
         cout << "Item ID: " << ID << endl;
         cout << "Item Name: " << nm << endl;
         cout << "Item Weight: " << wht << endl;
-        cout << "Item lenght: " << lnht << endl;
-        cout << "Item height: " << hgt << endl;
-        cout<<"\n****************************************\n";
+        cout << "Item Lenght: " << lnht << endl;
+        cout << "Item Height: " << hgt << endl;
     }
 
     int getID() 
@@ -102,8 +99,10 @@ StackVan() : maxSize(250), currentWht(0), top(-1) //constructor
 //--------------------------------------------------------------
 void pushs(int id, string n, double w, double h, double l) // put item on top
 {
+    currentWht += w;
     stackItems[top+1] = new Item(id, n, w, h, l);
     genid++;
+    top++; // increment top
 
 }
 void push(int id, string n, double w, double h, double l) // put item on top
@@ -111,31 +110,33 @@ void push(int id, string n, double w, double h, double l) // put item on top
     cout<<"\n*********************************************\n";  
     if (isFull())
     {
-        cout << "!Error! The Van Can not hold any more items!\n";
+        cout << "\n           !Error!\nThe Van Can not hold any more items!\n\n";
        
         return;
     }
     // Check if adding the item will exceed van's capacity
     if (currentWht + w > weightMax)
     {
-        cout << "     !Error!\nThe Van Has Reached its Weight Capacity!\n" ;
+        cout << "\n           !Error!\nThe Van Has Reached its Weight Capacity!\n\n" ;
        
         return;
     }
     else if (h > MH)
     {
-        cout << "     !Error!\nThe Items' Height is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
+        cout << "\n           !Error!\nThe Items' Height is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n\n";
         
         return;
     }
     else if (l > MW)
     {
-        cout << "     !Error!\nThe Items' Length is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
+        cout << "\n           !Error!\nThe Items' Length is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n\n";
        
         return;
     }
     else if (currentWht + w < weightMax && h <= MH && l <= MW)
     {
+         // Update current capacity
+        currentWht += w;
         stackItems[top+1] = new Item(id, n, w, h, l);
         genid++;
         cout<<"\nItem Has been Succesfully Entered!\n";
@@ -144,13 +145,10 @@ void push(int id, string n, double w, double h, double l) // put item on top
     }
     else
     {
-        cout << "     !Error!\nThe Van Has Reached its Weight Capacity!" << endl;
+        cout << "\n           !Error!\n\nThe Van Has Reached its Weight Capacity!\n\n";
         
         return;
     }
-    // Update current capacity
-    currentWht += w;
-    cout<<"\n*********************************************\n";  
 }
  void sortItems() {
         quicksort(0, top);
@@ -202,6 +200,10 @@ void peekAll()
     for (int i=top;i>=0;i--)
     {
         stackItems[i]->display();
+        if ( i != 0 )
+        {
+        cout<<"\n****************************************\n";
+        }
     }
 }
 //--------------------------------------------------------------
@@ -254,7 +256,19 @@ void popspecificitem(int id) {
     }
 }
 
+void peekW()
+{
+    cout<<"\nThe MAX Weight Capacity of the Van is "<<weightMax<<"kg\n";
+    cout<<"The Current Weight of the Van is "<<currentWht<<"kg\n";
+    cout<<"The Remaining Weight for the van is "<<weightMax- currentWht<<"kg\n\n";
+}
 
+void peekS()
+{
+    cout<<"\nThe MAX Size Capacity of the Van is "<<maxSize<<"\n";
+    cout<<"The Current Number of Items in the Van is "<<top+1<<"\n";
+    cout<<"The Remaining Size Capacity for the van is "<<maxSize- (top+1)<<"\n\n";
+}
 
 int gettop()
 {
@@ -267,16 +281,19 @@ int getgid(){
 }
 void showMenu()
 {
-    cout<<"\n*********************************************\n";  
+    cout<<"*********************************************\n\n";  
     cout<<"Welcome to CMC Inc. Van Service... \n\n";
-    cout<<"Moving Service Menu"<<endl;
-    cout<<"1.Add an Item to the Truck"<<endl;
-    cout<<"2.Remove an Item from the list(Removes from the back)"<<endl;
-    cout<<"3.Remove a Specific Item Based on ID"<<endl;
-    cout<<"4.Calculate optimal order to load in truck"<<endl;
-    cout<<"5.Display Final List of Items in the Van"<<endl;
-    cout<<"6.Quit Program"<<endl;
-    cout<<"Choice :";
+    cout<<"Moving Service Menu\n";
+    cout<<"1.Add an Item to the Truck\n";
+    cout<<"2.Remove an Item from the back\n";
+    cout<<"3.Remove a Specific Item Based on ID\n";
+    cout<<"4.Calculate optimal order to load in truck\n";
+    cout<<"5.Display Final List of Items in the Van\n";
+    cout<<"6.View Current Weight Properties of Van\n";
+    cout<<"7.View Current Size Properties of Van\n";
+    cout<<"8.Quit Program\n";
+    cout<<"\n*********************************************";
+    cout<<"\nChoice :";
 }
 
 
@@ -290,10 +307,10 @@ int main()
     truck.pushs(1003,"Chair", 5, 3, 4 );
     truck.pushs(1004,"Table", 20, 7, 5 );
     int choice;
+    string an;
     truck.showMenu();
     cin >> choice;
-    cout << "-----------------------------------------------------------" << endl;
-    while(choice != 6)
+    while(choice != 8)
         {
         switch(choice)
         {
@@ -305,57 +322,79 @@ int main()
                 double lnht;
                 double hgt;
                 ID = truck.getgid() +1;
-
-                cout<<"\n*********************************************\n";  
-                cout<<"New Item Generating...\n";
+                cout<<"*********************************************\n\n";  
+                cout<<"New Item Generating...\n\n";
                 cout<<"Please Enter The Name of Item: " ;
                 cin>>nm;
-                cout<<"Please Enter the Weight of the Item: ";
+                cout<<"Please Enter the Weight of the Item(kg): ";
                 cin>>wht;
                 cout<<"Please Enter the Length of the Item(ft): ";
                 cin>>lnht;
                 cout<<"Please Enter the height of the Item(ft): ";
                 cin>>hgt;
                 truck.push(ID, nm, wht, hgt,lnht);
+                cout<<"\n*********************************************\n";
+                cout<<"Do you want to add another item?(yes or no): ";
+                cin>>an;
                 break;
                 }
             case 2: 
                 {
-                cout<<"\n*********************************************\n";
+                cout<<"*********************************************\n";
                 truck.pop();
                 break;
                 }
             case 3:
                 {
                 int ID;
-                cout<<"\n*********************************************\n"; 
+                cout<<"*********************************************\n\n"; 
                 cout<<"Please Enter the Item ID wished to be removed: ";
                 cin>>ID;
+                 cout<<"\n*********************************************\n";
                 truck.popspecificitem(ID) ;
                 break;
                 }
             case 4: 
                 {
-                cout<<"\n*********************************************\n"; 
-                cout<<"Sorting Items...\n"; 
+                cout<<"*********************************************\n"; 
+                cout<<"\nSorting Items...\n"; 
                 truck.sortItems();
+                cout<<"\n!Van Was ordered Succesfully!\n\n";
                 break;
                 }
             case 5: 
                 {
-                cout<<"\n*********************************************\n";
+                cout<<"*********************************************\n";
                 truck.peekAll();
+                break;
+                }
+            case 6: 
+                {
+                cout<<"*********************************************\n";
+                truck.peekW();
+                break;
+                }
+            case 7: 
+                {
+                cout<<"*********************************************\n";
+                truck.peekS();
                 break;
                 }
             default:
                 {
-                cout<<"\n*********************************************\n";
-                cout << "Not an Choice" << endl;
+                cout<<"*********************************************\n";
+                cout << "\nNot an Choice\n";
                 break;
                 }
         }
-        truck.showMenu();
-        cin >> choice;
+        if (an != "yes"){
+            truck.showMenu();
+            cin >> choice;
+        }
+        else{
+            choice = 1;
+        }
+        
     }
     cout << "You have Exited the Moving Service, have a Great Day!";
 
