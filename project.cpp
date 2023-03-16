@@ -52,13 +52,45 @@ Item(const Item* obj) { ID = obj->ID; nm = obj->nm; wht = obj->wht; lnht = obj->
 class StackVan
 {
 private:
-
+    int MH = 25;
+    int MW = 15;
     int maxSize; //size of stack vector
     vector<Item*> stackItems; //stack vector
     int top; //top of stack
     double weightMax = 1000;
     double currentWht;
     int genid =1000;
+
+    void quicksort(int low, int high) {
+        if (low < high) {
+            // Partition the vector and get the pivot index
+            int pivotIndex = partition(low, high);
+            // Recursively call quicksort on the sub-vectors on either side of the pivot
+            quicksort(low, pivotIndex - 1);
+            quicksort(pivotIndex + 1, high);
+        }
+    }
+
+    int partition(int low, int high) {
+        // Use the weight of the last item as the pivot
+        double pivot = stackItems[high]->getWeight();
+        // Set the pivot index to the beginning of the vector
+        int pivotIndex = low;
+        // Loop through the vector from the beginning to the end
+        for (int i = low; i < high; i++) {
+            // If the weight of the current item is less than or equal to the pivot, swap it with the item at the pivot index
+            if (stackItems[i]->getWeight() >= pivot) {
+                swap(stackItems[i], stackItems[pivotIndex]);
+                // Increment the pivot index
+                pivotIndex++;
+            }
+        }
+        // Swap the pivot item with the item at the pivot index
+        swap(stackItems[high], stackItems[pivotIndex]);
+        // Return the pivot index
+        return pivotIndex;
+    }
+
 
 public:
 //--------------------------------------------------------------
@@ -70,13 +102,33 @@ StackVan() : maxSize(250), currentWht(0), top(-1) //constructor
 //--------------------------------------------------------------
 void push(int id, string n, double w, double h, double l) // put item on top
 {
+    cout<<"\n*********************************************\n";  
     if (isFull())
     {
-        cout << "!Error! The Van Can not hold any more items!" << endl;
+        cout << "!Error! The Van Can not hold any more items!\n";
+        genid--;
         return;
     }
     // Check if adding the item will exceed van's capacity
-    if (currentWht + w < weightMax) 
+    if (currentWht + w > weightMax)
+    {
+        cout << "     !Error!\nThe Van Has Reached its Weight Capacity!\n" ;
+        genid--;
+        return;
+    }
+    else if (h > MH)
+    {
+        cout << "     !Error!\nThe Items' Height is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
+        genid--;
+        return;
+    }
+    else if (l > MW)
+    {
+        cout << "     !Error!\nThe Items' Length is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
+        genid--;
+        return;
+    }
+    else if (currentWht + w < weightMax && h <= MH && l <= MW)
     {
         stackItems[top+1] = new Item(id, n, w, h, l);
 // add item to end of vector
@@ -84,13 +136,17 @@ void push(int id, string n, double w, double h, double l) // put item on top
     }
     else
     {
-        cout << "!Error!\n The Van Has Reached its Weight Capacity!" << endl;
+        cout << "     !Error!\nThe Van Has Reached its Weight Capacity!" << endl;
+        genid--;
         return;
     }
     // Update current capacity
     currentWht += w;
+    cout<<"\n*********************************************\n";  
 }
-
+ void sortItems() {
+        quicksort(0, top);
+    }
 void pushi(Item& it) // put item on top
 {
     double w = it.getWeight();
@@ -107,7 +163,7 @@ void pushi(Item& it) // put item on top
     }
     else
     {
-        cout << "!Error!\n The Van Has Reached its Weight Capacity!" << endl;
+        cout << "     !Error!\nThe Van Has Reached its Weight Capacity!" << endl;
         return;
     }
     // Update current capacity
@@ -204,6 +260,7 @@ int getgid(){
 }
 void showMenu()
 {
+    cout<<"\n*********************************************\n";  
     cout<<"Welcome to CMC Inc. Van Service... \n\n";
     cout<<"Moving Service Menu"<<endl;
     cout<<"1.Add an Item to the Truck"<<endl;
@@ -243,9 +300,9 @@ int main()
                 cin>>nm;
                 cout<<"Please Enter the Weight of the Item: ";
                 cin>>wht;
-                cout<<"Please Enter the Length of the Item: ";
+                cout<<"Please Enter the Length of the Item(ft): ";
                 cin>>lnht;
-                cout<<"Please Enter the height of the Item: ";
+                cout<<"Please Enter the height of the Item(ft): ";
                 cin>>hgt;
                 truck.push(ID, nm, wht, hgt,lnht);
                 break;
@@ -267,7 +324,9 @@ int main()
                 }
             case 4: 
                 {
-                cout<<"\n*********************************************\n";  
+                cout<<"\n*********************************************\n"; 
+                cout<<"Sorting Items...\n"; 
+                truck.sortItems();
                 break;
                 }
             case 5: 
