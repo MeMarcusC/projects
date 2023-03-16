@@ -204,57 +204,62 @@ int showMenu()
 void Menu()
 {
     int choice;
-            menu();
+            showMenu();
             cin >> choice;
             cout << "-----------------------------------------------------------" << endl;
     
-            while(option != 7)
+            while(choice != 7)
             {
-                switch(option)
+                switch(choice)
                 {
                     case 1:
                     {
                         cout<<"\n*********************************************\n";
-                        string IName;
-                        float IPrice;
-                        cout << "Please Enter Item Name: ";
-                        cin >> IName;
-                        cout << "Please Enter Item Price: ";
-                        cin >> IPrice;
-                        push(IName, IPrice);
                         
                         break;
                     }
                     case 2: 
                     {
-                         cout<<"\n*********************************************\n";
-                         peek();
+                        cout<<"\n*********************************************\n";
+                        
                         break;
                     }
                     case 3:
                     {
                         cout<<"\n*********************************************\n";
-                        pop();
+                        
                         break;
                     }
                     case 4: 
                     {
                         cout<<"\n*********************************************\n";
-                        total();
+                        
+                        break;
+                    }
+                    case 5: 
+                    {
+                        cout<<"\n*********************************************\n";
+                        
+                        break;
+                    }
+                    case 6: 
+                    {
+                        cout<<"\n*********************************************\n";
+                        
                         break;
                     }
                     default:
                     {
                         cout<<"\n*********************************************\n";
-                        cout << "Not an Option" << endl;
+                        cout << "Not an Choice" << endl;
                         break;
                     }
                 }
-                menu();
-                cin >> option;
+                showMenu();
+                cin >> choice;
                 
             }
-            cout << "You have Exited the Shop, have a Great Day!";
+            cout << "You have Exited the Moving Service, have a Great Day!";
 }
 
 };
