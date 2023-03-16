@@ -1,12 +1,17 @@
+//Program Name: CMC Van Service
+//Date: 16/03/23
+//Members: Claudia Orellano, Carmita Sosa, Marcus Canul
+
 #include <iostream>
 #include <string>
 #include <vector>
 
 using namespace std;
 
+//Creating class Item to be used to store in the stack Van
 class Item {
 private:
-
+    //Declaring Variables
     int ID;
     string nm;
     double wht;
@@ -14,12 +19,15 @@ private:
     double hgt;
 
 public:
+    //Constructors that are to be called in the stack methods
+
     Item()
     {ID=0;}
     Item(int id,string n,double w, double h, double l) : ID(id), nm(n), wht(w), lnht(l), hgt(h)
     {}
     Item(const Item* obj) { ID = obj->ID; nm = obj->nm; wht = obj->wht; lnht = obj->lnht; hgt = obj->hgt;}
 
+    // Will display item information
     void display() 
     {
         cout<<"\nPrinting....\n\n";
@@ -32,7 +40,7 @@ public:
 
     int getID() 
     {
-        return ID;
+        return ID; 
     }
 
     string getName() 
@@ -46,6 +54,7 @@ public:
     }
 };
 
+//Creating class StackVan to be used to store in the main
 class StackVan
 {
 private:
