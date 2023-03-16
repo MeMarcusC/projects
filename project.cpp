@@ -256,14 +256,14 @@ void popspecificitem(int id) {
     }
 }
 
-void peekW()
+void peekW() //Displays Information about weight capacity of the van
 {
     cout<<"\nThe MAX Weight Capacity of the Van is "<<weightMax<<"kg\n";
     cout<<"The Current Weight of the Van is "<<currentWht<<"kg\n";
     cout<<"The Remaining Weight for the van is "<<weightMax- currentWht<<"kg\n\n";
 }
 
-void peekS()
+void peekS() //Displays Information about size capacity of the van
 {
     cout<<"\nThe MAX Size Capacity of the Van is "<<maxSize<<"\n";
     cout<<"The Current Number of Items in the Van is "<<top+1<<"\n";
@@ -279,7 +279,7 @@ int getgid(){
     int gid = genid;
     return gid;
 }
-void showMenu()
+void showMenu() // This is the menu that will be displayed so user can make a choice.
 {
     cout<<"*********************************************\n\n";  
     cout<<"Welcome to CMC Inc. Van Service... \n\n";
@@ -301,6 +301,7 @@ void showMenu()
 int main()
 {
     StackVan truck; // initialize van with a maximum capacity of 3600
+    //5 objects that have already been pushed.
     truck.pushs(1000,"Sofa", 50, 4, 3 );
     truck.pushs(1001,"Lamp", 3, 0.5, 1 );
     truck.pushs(1002,"Box", 10, 5, 5 );
@@ -310,81 +311,90 @@ int main()
     string an;
     truck.showMenu();
     cin >> choice;
+    // The code uses a switch to output results of the choice the user makes in the menu.
     while(choice != 8)
         {
         switch(choice)
         {
             case 1:
                 {
-                string nm;
-                int ID;
-                double wht;
-                double lnht;
-                double hgt;
-                ID = truck.getgid() +1;
-                cout<<"*********************************************\n\n";  
-                cout<<"New Item Generating...\n\n";
-                cout<<"Please Enter The Name of Item: " ;
-                cin>>nm;
-                cout<<"Please Enter the Weight of the Item(kg): ";
-                cin>>wht;
-                cout<<"Please Enter the Length of the Item(ft): ";
-                cin>>lnht;
-                cout<<"Please Enter the height of the Item(ft): ";
-                cin>>hgt;
-                truck.push(ID, nm, wht, hgt,lnht);
-                cout<<"\n*********************************************\n";
-                cout<<"Do you want to add another item?(yes or no): ";
-                cin>>an;
-                break;
+                    // Code to input the informaton of the item that is going to be added to the truck
+                    string nm;
+                    int ID;
+                    double wht;
+                    double lnht;
+                    double hgt;
+                    ID = truck.getgid() +1;
+                    cout<<"*********************************************\n\n";  
+                    cout<<"New Item Generating...\n\n";
+                    cout<<"Please Enter The Name of Item: " ;
+                    cin>>nm;
+                    cout<<"Please Enter the Weight of the Item(kg): ";
+                    cin>>wht;
+                    cout<<"Please Enter the Length of the Item(ft): ";
+                    cin>>lnht;
+                    cout<<"Please Enter the height of the Item(ft): ";
+                    cin>>hgt;
+                    truck.push(ID, nm, wht, hgt,lnht);
+                    cout<<"\n*********************************************\n";
+                    cout<<"Do you want to add another item?(yes or no): ";
+                    cin>>an;
+                    break;
                 }
             case 2: 
                 {
-                cout<<"*********************************************\n";
-                truck.pop();
-                break;
+                    // Code that removes item from the back of the truck.
+                    cout<<"*********************************************\n";
+                    truck.pop();
+                    break;
                 }
             case 3:
                 {
-                int ID;
-                cout<<"*********************************************\n\n"; 
-                cout<<"Please Enter the Item ID wished to be removed: ";
-                cin>>ID;
-                 cout<<"\n*********************************************\n";
-                truck.popspecificitem(ID) ;
-                break;
+                    //Code that removes specific item based on ID.
+                    int ID;
+                    cout<<"*********************************************\n\n"; 
+                    cout<<"Please Enter the Item ID wished to be removed: ";
+                    cin>>ID;
+                    cout<<"\n*********************************************\n";
+                    truck.popspecificitem(ID) ;
+                    break;
                 }
             case 4: 
                 {
-                cout<<"*********************************************\n"; 
-                cout<<"\nSorting Items...\n"; 
-                truck.sortItems();
-                cout<<"\n!Van Was ordered Succesfully!\n\n";
-                break;
+                    //Code that calculates optimal order to load in truck.
+                    cout<<"*********************************************\n"; 
+                    cout<<"\nSorting Items...\n"; 
+                    truck.sortItems();
+                    cout<<"\n!Van Was ordered Succesfully!\n\n";
+                    break;
                 }
             case 5: 
                 {
-                cout<<"*********************************************\n";
-                truck.peekAll();
-                break;
+                    //Code that displays final list of items in the truck.
+                    cout<<"*********************************************\n";
+                    truck.peekAll();
+                    break;
                 }
             case 6: 
                 {
-                cout<<"*********************************************\n";
-                truck.peekW();
-                break;
+                    //Code that displays current weight properties of the truck.
+                    cout<<"*********************************************\n";
+                    truck.peekW();
+                    break;
                 }
             case 7: 
                 {
-                cout<<"*********************************************\n";
-                truck.peekS();
-                break;
+                    //Code that displays current size properties of the truck.
+                    cout<<"*********************************************\n";
+                    truck.peekS();
+                    break;
                 }
             default:
                 {
-                cout<<"*********************************************\n";
-                cout << "\nNot an Choice\n";
-                break;
+                    //Code that of output if choice inputed is not an option in the menu.
+                    cout<<"*********************************************\n";
+                    cout << "\nNot an Choice\n";
+                    break;
                 }
         }
         if (an != "yes"){
