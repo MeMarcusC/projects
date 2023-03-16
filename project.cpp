@@ -15,110 +15,6 @@ private:
     double hgt;
 
 public:
-    Item(int id,string n,double w, double h, double l) : ID(id), nm(n), wht(w), lnht(l), hgt(h)
-    {}
-    Item(const Item& obj) { ID = obj.ID; nm = obj.nm; wht = obj.wht; lnht = obj.lnht; hgt = obj.hgt;}
-
-    void display() 
-    {
-        cout<<"\n****************************************\n";
-        cout<<" Printing....\n\n";
-        cout << "Item ID: " << ID << endl;
-        cout << "Item Name: " << nm << endl;
-        cout << "Item Weight: " << wht << endl;
-        cout << "Item lenght: " << lnht << endl;
-        cout << "Item height: " << hgt << endl;
-        cout<<"\n****************************************\n";
-    }
-
-    int getID() 
-    {
-        return ID;
-    }
-
-    string getName() 
-    {
-        return nm;
-    }
-
-    double getWeight()
-    {
-        return wht;
-    }
-};
-
-class StackVan
-{
-private:
-
-    int maxSize; //size of stack vector
-    vector<Item*> stackItems; //stack vector
-    int top; //top of stack
-    double weightMax = 1000;
-    double currentWht;
-    int genid =1000;
-
-public:
-//--------------------------------------------------------------
-
-StackVan() : maxSize(250), currentWht(0), top(-1) //constructor
-{
-    stackItems.reserve(250); //size the vector
-}
-//--------------------------------------------------------------
-void push(int id, string n, double w, double h, double l) // put item on top
-{
-    if (isFull())
-    {
-        cout << "!Error! The Van Can not hold any more items!" << endl;
-        return;
-    }
-    // Check if adding the item will exceed van's capacity
-    if (currentWht + w < weightMax) 
-    {
-        stackItems[++top] = new Item(id, n, w, h, l); // increment top
-    }
-    else
-    {
-        cout << "!Error!\n The Van Has Reached its Weight Capacity!" << endl;
-        return;
-    }
-      // Sort the vector using quicksort algorithm
-       // quicksort(0, top);
-        
-        // Update current capacity
-        currentWht += w;
-}
-void pushi(Item it) // put item on top
-{
-    if (isFull())
-    {
-        cout << "!Error! The Van Can not hold any more items!" << endl;
-        return;
-    }
-    // Check if adding the item will exceed van's capacity
-    if (currentWht + w < weightMax) 
-    {
-        stackItems[++top] = new Item(it); // increment top
-    }
-    else
-#include <iostream>
-#include <string>
-#include <vector>
-
-using namespace std;
-
-class Item {
-private:
-
-    int ID;
-    int room;
-    string nm;
-    double wht;
-    double lnht;
-    double hgt;
-
-public:
     Item()
     {ID=0;}
     Item(int id,string n,double w, double h, double l) : ID(id), nm(n), wht(w), lnht(l), hgt(h)
@@ -182,7 +78,8 @@ void push(int id, string n, double w, double h, double l) // put item on top
     // Check if adding the item will exceed van's capacity
     if (currentWht + w < weightMax) 
     {
-        stackItems.push_back(new Item(id, n, w, h, l)); // add item to end of vector
+        stackItems[top+1] = new Item(id, n, w, h, l);
+// add item to end of vector
         top++; // increment top
     }
     else
@@ -229,12 +126,7 @@ void pop() // take item from top of stack
     currentWht-= stackItems[top]->getWeight();
     top -= 1;
 }
-Item* ret()
-{
-    Item* send = stackItems[top];
-    top--;
-    return send;
-}
+
 //--------------------------------------------------------------
 void peek() //peek at top of stack
 { 
@@ -258,42 +150,52 @@ bool isFull()
 {
     return (top == maxSize - 1); // stack is full when top is equal to the last index
 }
-void popspecificitem(int ID) 
-{
-    StackVan* TempSt = new StackVan();
-    if (isEmpty()) 
-    {
-        cout << "Van is currently empty." << endl;
-        return;
-    }
-    // Check if the item exists in the van
+void popspecificitem(int id) {
+    // Create a temporary stack to store the items
+    vector<Item*> tempStack;
+    // Search for the item with the specific ID in the stack vector
     bool found = false;
-    for (int i = 0; i <= top; i++) 
-    {
-        if (stackItems[i]->getID() == ID)
-        {
+    for (int i = top; i >= 0; i--) {
+        if (stackItems[i]->getID() == id) {
+            // If the item with the specific ID is found, pop it from the vector
+            stackItems[i]->display();
+            currentWht -= stackItems[i]->getWeight();
+            top -= 1;
             found = true;
-            // Remove the item from the vector and update the current capacity
-            pop();
             break;
         }
-        else 
-        {
-            Item tempItem = stackItems[i];
-            TempSt->pushi(tempItem);
-
+        else {
+            // If the item with the specific ID is not found, push the item onto the temporary stack
+            tempStack.push_back(stackItems[i]);
+            currentWht -= stackItems[i]->getWeight();
+            top -= 1;
         }
     }
-
-    if (!found) 
-    {
-        cout << "Item with ID " << ID << " is not in the van." << endl;
+    // If the item with the specific ID is not found, push all the items from the temporary stack back onto the vector in the same order they were in before
+    if (!found) {
+        for (int i = tempStack.size() - 1; i >= 0; i--) {
+            stackItems.push_back(tempStack[i]);
+            currentWht += tempStack[i]->getWeight();
+            top += 1;
+        }
+        cout << "Item with ID " << id << " was not found in the van." << endl;
     }
-    else 
-    {
-        stackItems.push_back(TempSt->ret());
-
+    // If the item with the specific ID is found, push all the items from the temporary stack back onto the vector in the same order they were in before the item with the specific ID was popped
+    else {
+        for (int i = tempStack.size() - 1; i >= 0; i--) {
+            stackItems[top+1]=tempStack[i];
+            currentWht += tempStack[i]->getWeight();
+            top += 1;
+        }
     }
+}
+
+
+
+int gettop()
+{
+   int got = top;
+    return got; 
 }
 int getgid(){
     int gid = genid;
@@ -357,7 +259,11 @@ int main()
                 }
             case 3:
                 {
-                cout<<"\n*********************************************\n";    
+                int ID;
+                cout<<"\n*********************************************\n"; 
+                cout<<"Please Enter the Item ID wished to be removed: ";
+                cin>>ID;
+                truck.popspecificitem(ID) ;
                 break;
                 }
             case 4: 
@@ -368,6 +274,7 @@ int main()
             case 5: 
                 {
                 cout<<"\n*********************************************\n";
+                truck.peekAll();
                 break;
                 }
             case 6: 
