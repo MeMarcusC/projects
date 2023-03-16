@@ -59,7 +59,7 @@ private:
     int top; //top of stack
     double weightMax = 1000;
     double currentWht;
-    int genid =1000;
+    int genid =999;
 
     void quicksort(int low, int high) {
         if (low < high) {
@@ -106,38 +106,40 @@ void push(int id, string n, double w, double h, double l) // put item on top
     if (isFull())
     {
         cout << "!Error! The Van Can not hold any more items!\n";
-        genid--;
+       
         return;
     }
     // Check if adding the item will exceed van's capacity
     if (currentWht + w > weightMax)
     {
         cout << "     !Error!\nThe Van Has Reached its Weight Capacity!\n" ;
-        genid--;
+       
         return;
     }
     else if (h > MH)
     {
         cout << "     !Error!\nThe Items' Height is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
-        genid--;
+        
         return;
     }
     else if (l > MW)
     {
         cout << "     !Error!\nThe Items' Length is too big for the van!\n....(Please size down the item to fit (15x25ft)...\n";
-        genid--;
+       
         return;
     }
     else if (currentWht + w < weightMax && h <= MH && l <= MW)
     {
         stackItems[top+1] = new Item(id, n, w, h, l);
+        genid++;
+        cout<<"\nItem Has been Succesfully Entered!\n";
 // add item to end of vector
         top++; // increment top
     }
     else
     {
         cout << "     !Error!\nThe Van Has Reached its Weight Capacity!" << endl;
-        genid--;
+        
         return;
     }
     // Update current capacity
@@ -255,7 +257,6 @@ int gettop()
 }
 int getgid(){
     int gid = genid;
-    genid++;
     return gid;
 }
 void showMenu()
@@ -277,11 +278,11 @@ void showMenu()
 int main()
 {
     StackVan truck; // initialize van with a maximum capacity of 3600
-    truck.push("Sofa", "50", "4", "3" )
-    truck.push("Lamp", "3", "0.5", "1" )
-    truck.push("Box", "10", "5", "5" )
-    truck.push("Chair", "5", "3", "4" )
-    truck.push("Table", "20", "7", "5" )
+    truck.push(1000,"Sofa", 50, 4, 3 );
+    truck.push(1001,"Lamp", 3, 0.5, 1 );
+    truck.push(1002,"Box", 10, 5, 5 );
+    truck.push(1003,"Chair", 5, 3, 4 );
+    truck.push(1004,"Table", 20, 7, 5 );
     int choice;
     truck.showMenu();
     cin >> choice;
