@@ -277,11 +277,11 @@ void showMenu()
 int main()
 {
     StackVan truck; // initialize van with a maximum capacity of 3600
-    truck.push("Sofa", "50", "4", "3" )
-    truck.push("Lamp", "3", "0.5", "1" )
-    truck.push("Box", "10", "5", "5" )
-    truck.push("Chair", "5", "3", "4" )
-    truck.push("Table", "20", "7", "5" )
+    truck.push("Sofa", 50, 4, 3 );
+    truck.push("Lamp", 3, 0.5, 1 );
+    truck.push("Box", 10, 5, 5 );
+    truck.push("Chair", 5, 3, 4 );
+    truck.push("Table", 20, 7, 5 );
     int choice;
     truck.showMenu();
     cin >> choice;
