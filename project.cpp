@@ -211,8 +211,7 @@ void showMenu()
     cout<<"3.Remove a Specific Item Based on ID"<<endl;
     cout<<"4.Calculate optimal order to load in truck"<<endl;
     cout<<"5.Display Final List of Items in the Van"<<endl;
-    cout<<"6.Search By Rooms"<<endl;
-    cout<<"7.Quit Program"<<endl;
+    cout<<"6.Quit Program"<<endl;
     cout<<"Choice :";
 }
 
@@ -225,7 +224,7 @@ int main()
     truck.showMenu();
     cin >> choice;
     cout << "-----------------------------------------------------------" << endl;
-    while(choice != 7)
+    while(choice != 6)
         {
         switch(choice)
         {
@@ -275,11 +274,6 @@ int main()
                 {
                 cout<<"\n*********************************************\n";
                 truck.peekAll();
-                break;
-                }
-            case 6: 
-                {
-                cout<<"\n*********************************************\n";
                 break;
                 }
             default:
